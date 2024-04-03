@@ -1,3 +1,4 @@
+const db = require("./database.js");
 const express = require("express");
 const sqlite3 = require("sqlite3").verbose();
 const app = express();
@@ -6,8 +7,6 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
-
-let db = new sqlite3.Database("./ecommerce.db");
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -200,6 +199,36 @@ app.post("/orders", (req, res) => {
     }
   });
 });
+
+app.post("/categories", (req, res) => {
+  const { name } = req.body;
+
+  // Validate request data
+  if (!name) {
+    return res.status(400).send("Missing required data");
+  }
+
+  const sql = "INSERT INTO categories (name) VALUES (?)";
+  db.run(sql, [name], function (err) {
+    if (err) {
+      res.status(500).send("Database error");
+    } else {
+      res.send({ id: this.lastID });
+    }
+  });
+});
+
+app.get("/categories", (req, res) => {
+  const sql = "SELECT * FROM categories";
+  db.all(sql, [], (err, rows) => {
+    if (err) {
+      res.status(500).send("Database error");
+    } else {
+      res.send(rows);
+    }
+  });
+});
+
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
