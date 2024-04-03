@@ -1,6 +1,6 @@
-import axios from "axios";
+import axios from 'axios';
 
-const BASE_URL = "http://localhost:3001";
+const BASE_URL = 'http://localhost:3001';
 
 export function getCategories() {
   return axios.get(`${BASE_URL}/categories`);
