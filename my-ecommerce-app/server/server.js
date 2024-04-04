@@ -229,6 +229,18 @@ app.get("/categories", (req, res) => {
   });
 });
 
+app.get("/categories/:categoryId", (req, res) => {
+  const { categoryId } = req.params;
+  const sql = "SELECT * FROM products WHERE categoryId = ?";
+  db.all(sql, [categoryId], (err, rows) => {
+    if (err) {
+      res.status(500).send("Database error");
+    } else {
+      res.send(rows);
+    }
+  });
+});
+
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
