@@ -27,4 +27,9 @@ export function loginUser(username, password) {
   return axios.post(`${BASE_URL}/login`, { username, password });
 }
 
+export function createOrder(userId, username, items, total) {
+  const date = new Date().toISOString();
+  return axios.post(`${BASE_URL}/orders`, { userId, username, items, total, date });
+}
+
 // ... add more functions as needed ...

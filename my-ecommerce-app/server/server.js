@@ -69,6 +69,18 @@ app.get("/products", (req, res) => {
   });
 });
 
+app.get("/products/:productId", (req, res) => {
+  const { productId } = req.params;
+  const sql = "SELECT * FROM products WHERE id = ?";
+  db.get(sql, [productId], (err, row) => {
+    if (err) {
+      res.status(500).send("Database error");
+    } else {
+      res.send(row);
+    }
+  });
+});
+
 app.post("/products", (req, res) => {
   const { name, description, image, price, stock, categoryId } = req.body;
   const sql =
@@ -183,10 +195,9 @@ app.get("/orders/:userId", (req, res) => {
 
 // Orders routes
 app.post("/orders", (req, res) => {
-  const { userId, total } = req.body;
+  const { userId, username, items, total, date } = req.body;
 
-  // Validate request data
-  if (!userId || !total) {
+  if (!userId || !username || !items || items.length === 0 || !total || total <= 0 || !date) {
     return res.status(400).send("Missing required data");
   }
 

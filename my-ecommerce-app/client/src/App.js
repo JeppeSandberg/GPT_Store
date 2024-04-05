@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import './App.css';
 import Products from './Components/Products';
 import ProductDetails from './Components/ProductDetails';
@@ -16,6 +17,7 @@ function App() {
         <div className="App">
           <header className="App-header">
             <h1>My Ecommerce App</h1>
+            <Link to="/">Home</Link>
           </header>
           <Categories />
           <Routes>
