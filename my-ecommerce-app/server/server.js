@@ -6,7 +6,31 @@ const port = process.env.PORT || 3001;
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const bcrypt = require("bcrypt");
+const jwt = require('jsonwebtoken');
+const SECRET_KEY = 'eyJhbGciOiJIUzI1NiJ9.eyJSb2xlIjoiQWRtaW4iLCJJc3N1ZXIiOiJJc3N1ZXIiLCJVc2VybmFtZSI6IkphdmFJblVzZSIsImV4cCI6MTcxMjQ5MDY5OSwiaWF0IjoxNzEyNDkwNjk5fQ.o-HatzfSExh8FjnfLU1eH_IhUuj-gs__ELWw4tCRmv4' // Replace this with your actual secret key
 const saltRounds = 10;
+
+function verifyToken(token, callback) {
+  jwt.verify(token, SECRET_KEY, callback);
+}
+
+app.use((req, res, next) => {
+  const authHeader = req.headers.authorization;
+
+  if (authHeader) {
+    const token = authHeader.split(' ')[1];
+    jwt.verify(token, SECRET_KEY, (err, user) => {
+      if (err) {
+        return res.sendStatus(403);
+      }
+
+      req.user = user;
+      next();
+    });
+  } else {
+    res.sendStatus(401);
+  }
+});
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -49,7 +73,8 @@ app.post("/login", (req, res) => {
         if (err) {
           res.status(500).send(err);
         } else if (result) {
-          res.send({ id: row.id, username: row.username });
+          const token = jwt.sign({ id: row.id, username: row.username, isAdmin: row.isAdmin }, SECRET_KEY, { expiresIn: '1h' });
+          res.send({ token });
         } else {
           res.status(401).send("Password is incorrect");
         }
@@ -250,6 +275,35 @@ app.get("/categories/:categoryId", (req, res) => {
       res.send(rows);
     }
   });
+});
+
+function authenticate(req, res, next) {
+  const token = req.headers['authorization'];
+
+  if (!token) {
+    return res.status(401).send('Missing authentication token');
+  }
+
+  verifyToken(token, (err, user) => {
+    if (err) {
+      return res.status(401).send('Invalid authentication token');
+    }
+
+    req.user = user;
+    next();
+  });
+}
+
+function authorize(req, res, next) {
+  if (!req.user.isAdmin) {
+    return res.status(403).send('User is not authorized');
+  }
+
+  next();
+}
+
+app.get('/admin/orders', authenticate, authorize, (req, res) => {
+  // Fetch and return the orders data
 });
 
 app.listen(port, () => {

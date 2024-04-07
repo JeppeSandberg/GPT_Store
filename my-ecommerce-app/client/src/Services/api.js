@@ -19,8 +19,8 @@ export function getUser(userId) {
   return axios.get(`${BASE_URL}/users/${userId}`);
 }
 
-export function registerUser(username, password) {
-  return axios.post(`${BASE_URL}/register`, { username, password });
+export function registerUser(username, password, isAdmin = false) {
+  return axios.post(`${BASE_URL}/register`, { username, password, isAdmin });
 }
 
 export function loginUser(username, password) {
@@ -31,5 +31,19 @@ export function createOrder(userId, username, items, total) {
   const date = new Date().toISOString();
   return axios.post(`${BASE_URL}/orders`, { userId, username, items, total, date });
 }
+
+export function getOrders() {
+  return axios.get(`${BASE_URL}/orders`)
+    .then(response => response.data)
+    .catch(error => console.error('Error:', error));
+}
+
+export function updateProduct(id, data) {
+  return axios.put(`${BASE_URL}/products/${id}`, data)
+    .then(response => response.data)
+    .catch(error => console.error('Error:', error));
+}
+
+// ... rest of the code ...
 
 // ... add more functions as needed ...
