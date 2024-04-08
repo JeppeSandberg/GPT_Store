@@ -29,9 +29,7 @@ function App() {
             <Route path="/cart" element={<Cart />} />
             <Route path="/products/:productId" element={<ProductDetails />} />
             <Route path="/categories/:categoryId" element={<Products />} />
-            <Route path="/admin" element={<PrivateRoute />}>
-              <Route path="" element={<AdminPage />} />
-            </Route>
+            <Route path="/admin" element={<AdminPage />} />
           </Routes>
         </div>
       </Router>

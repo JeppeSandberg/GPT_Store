@@ -10,12 +10,12 @@ function Products() {
 
   useEffect(() => {
     if (categoryId) {
-      getProducts(categoryId).then(response => {
-        setProducts(response.data);
+      getProducts(categoryId).then(products => {
+        setProducts(products);
       });
     } else {
-      getProducts().then(response => {
-        setProducts(response.data);
+      getProducts().then(products => {
+        setProducts(products);
       });
     }
   }, [categoryId]);

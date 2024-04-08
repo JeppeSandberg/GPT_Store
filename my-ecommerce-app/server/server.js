@@ -10,11 +10,13 @@ const jwt = require('jsonwebtoken');
 const SECRET_KEY = 'eyJhbGciOiJIUzI1NiJ9.eyJSb2xlIjoiQWRtaW4iLCJJc3N1ZXIiOiJJc3N1ZXIiLCJVc2VybmFtZSI6IkphdmFJblVzZSIsImV4cCI6MTcxMjQ5MDY5OSwiaWF0IjoxNzEyNDkwNjk5fQ.o-HatzfSExh8FjnfLU1eH_IhUuj-gs__ELWw4tCRmv4' // Replace this with your actual secret key
 const saltRounds = 10;
 
+app.use(cors());
+
 function verifyToken(token, callback) {
   jwt.verify(token, SECRET_KEY, callback);
 }
 
-app.use((req, res, next) => {
+function authenticate(req, res, next) {
   const authHeader = req.headers.authorization;
 
   if (authHeader) {
@@ -30,9 +32,9 @@ app.use((req, res, next) => {
   } else {
     res.sendStatus(401);
   }
-});
+}
 
-app.use(cors());
+
 app.use(bodyParser.json());
 
 app.get("/", (req, res) => {
@@ -201,6 +203,17 @@ app.delete("/cart/:id", (req, res) => {
       res.status(500).send(err);
     } else {
       res.send({ changes: this.changes });
+    }
+  });
+});
+
+app.get("/orders", (req, res) => {
+  const sql = "SELECT * FROM orders";
+  db.all(sql, [], (err, rows) => {
+    if (err) {
+      res.status(500).send("Database error");
+    } else {
+      res.send(rows);
     }
   });
 });

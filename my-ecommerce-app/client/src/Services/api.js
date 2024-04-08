@@ -3,12 +3,15 @@ import axios from 'axios';
 const BASE_URL = 'http://localhost:3001';
 
 export function getCategories() {
-  return axios.get(`${BASE_URL}/categories`);
+  return axios.get(`${BASE_URL}/categories`)
+    .then(response => {
+      return response.data;
+    });
 }
 
 export function getProducts(categoryId) {
   const url = categoryId ? `${BASE_URL}/categories/${categoryId}` : `${BASE_URL}/products`;
-  return axios.get(url);
+  return axios.get(url).then(response => response.data);
 }
 
 export function getProduct(productId) {
@@ -38,9 +41,20 @@ export function getOrders() {
     .catch(error => console.error('Error:', error));
 }
 
+export function addProduct(data) {
+  return axios.post(`${BASE_URL}/products`, data)
+    .then(response => response.data)
+    .catch(error => console.error('Error:', error));
+}
+
+export function removeProduct(id) {
+  return axios.delete(`${BASE_URL}/products/${id}`)
+    .catch(error => console.error('Error:', error));
+}
+
 export function updateProduct(id, data) {
   return axios.put(`${BASE_URL}/products/${id}`, data)
-    .then(response => response.data)
+    .then(response => ({ ...response.data, id })) // Ensure that the updated product has the same id
     .catch(error => console.error('Error:', error));
 }
 

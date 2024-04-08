@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { loginUser } from '../Services/api';
 import { UserContext } from '../UserContext';
 import axios from 'axios';
+import { jwtDecode } from 'jwt-decode';
 
 function Login() {
   const [username, setInputUsername] = useState('');
@@ -21,6 +22,17 @@ function Login() {
       .then(response => {
         const { token } = response.data;
         axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+  
+        // Decode the token
+        const decoded = jwtDecode(token);
+  
+        // Update the UserContext
+        userContext.setUserId(decoded.id);
+        userContext.setUsername(decoded.username);
+        userContext.setIsAdmin(Boolean(decoded.isAdmin));
+
+        console.log('isAdmin after login:', userContext.isAdmin);
+  
         navigate('/');
       })
       .catch(error => {
