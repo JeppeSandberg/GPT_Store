@@ -18,8 +18,19 @@
 
 .App-header {
   background-color: #282c34;
-  padding: 20px;
+  min-height: 60px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+  font-size: calc(10px + 2vmin);
   color: white;
+  padding: 20px;
+}
+
+.App-header a {
+  color: #61dafb;
+  text-decoration: none;
 }
 
 .App-link {
@@ -31,6 +42,7 @@ h1 {
 }
 /* Style for the Products component */
 .Products {
+  margin-top: 20px;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 20px;
@@ -58,6 +70,35 @@ h1 {
 .Product p {
   color: #888;
   margin-bottom: 10px;
+}
+
+.ViewCart {
+  margin-right: 20px;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  text-decoration: none;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.ViewCart:hover {
+  background-color: #0056b3;
+}
+
+.Categories {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  padding: 20px;
+  background-color: #f8f9fa;
+  margin-bottom: 20px;
+}
+
+.Categories a {
+  color: #007bff;
+  text-decoration: none;
+  font-size: 1.2em;
 }
 
 .admin-page {

@@ -10,8 +10,21 @@ export function getCategories() {
 }
 
 export function getProducts(categoryId) {
-  const url = categoryId ? `${BASE_URL}/categories/${categoryId}` : `${BASE_URL}/products`;
-  return axios.get(url).then(response => response.data);
+  return axios.get(`${BASE_URL}/products${categoryId ? `?categoryId=${categoryId}` : ''}`)
+    .then(async response => {
+      const products = response.data;
+      for (let product of products) {
+        const ratings = await getRatings(product.id);
+        if (ratings.length > 0) {
+          const total = ratings.reduce((sum, rating) => sum + rating.rating, 0);
+          product.averageRating = total / ratings.length;
+        } else {
+          product.averageRating = 0;
+        }
+      }
+      return products;
+    })
+    .catch(error => console.error('Error:', error));
 }
 
 export function getProduct(productId) {
@@ -55,6 +68,21 @@ export function removeProduct(id) {
 export function updateProduct(id, data) {
   return axios.put(`${BASE_URL}/products/${id}`, data)
     .then(response => ({ ...response.data, id })) // Ensure that the updated product has the same id
+    .catch(error => console.error('Error:', error));
+}
+
+export function getRatings(productId) {
+  return axios.get(`${BASE_URL}/ratings/${productId}`)
+    .then(response => {
+      console.log('getRatings response:', response);
+      return response.data;
+    })
+    .catch(error => console.error('Error:', error));
+}
+
+export function addRating(productId, rating, userId) {
+  return axios.post(`${BASE_URL}/ratings`, { productId, rating, userId })
+    .then(response => response.data)
     .catch(error => console.error('Error:', error));
 }
 

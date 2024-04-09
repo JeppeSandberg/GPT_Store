@@ -20,6 +20,9 @@ db.serialize(function () {
   db.run(
     "CREATE TABLE IF NOT EXISTS orders (id INTEGER PRIMARY KEY, userId INTEGER, total REAL)"
   );
+  db.run(
+    "CREATE TABLE IF NOT EXISTS ratings (id INTEGER PRIMARY KEY, userId INTEGER, productId INTEGER, rating INTEGER, FOREIGN KEY(userId) REFERENCES users(id), FOREIGN KEY(productId) REFERENCES products(id))"
+  );
 });
 
 module.exports = db;

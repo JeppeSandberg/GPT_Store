@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import './App.css';
@@ -11,8 +11,11 @@ import Categories from './Components/Categories';
 import AdminPage from './Components/AdminPage';
 import PrivateRoute from './Components/PrivateRoute';
 import { CartProvider } from './CartContext';
+import { UserContext } from './UserContext';
 
 function App() {
+  const { username } = useContext(UserContext);
+
   return (
     <CartProvider>
       <Router>
@@ -20,6 +23,9 @@ function App() {
           <header className="App-header">
             <h1>My Ecommerce App</h1>
             <Link to="/">Home</Link>
+            <Link to="/login">Login</Link>
+            <Link to="/register">Register</Link>
+            {username && <p>Welcome, {username}!</p>}
           </header>
           <Categories />
           <Routes>

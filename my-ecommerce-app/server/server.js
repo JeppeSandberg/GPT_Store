@@ -290,6 +290,37 @@ app.get("/categories/:categoryId", (req, res) => {
   });
 });
 
+// Ratings routes
+app.post("/ratings", (req, res) => {
+  const { userId, productId, rating } = req.body;
+
+  // Validate request data
+  if (!userId || !productId || !rating) {
+    return res.status(400).send("Missing required data");
+  }
+
+  const sql = "INSERT INTO ratings (userId, productId, rating) VALUES (?, ?, ?)";
+  db.run(sql, [userId, productId, rating], function (err) {
+    if (err) {
+      res.status(500).send("Database error");
+    } else {
+      res.send({ id: this.lastID });
+    }
+  });
+});
+
+app.get("/ratings/:productId", (req, res) => {
+  const { productId } = req.params;
+  const sql = "SELECT * FROM ratings WHERE productId = ?";
+  db.all(sql, productId, (err, rows) => {
+    if (err) {
+      res.status(500).send("Database error");
+    } else {
+      res.send(rows);
+    }
+  });
+});
+
 function authenticate(req, res, next) {
   const token = req.headers['authorization'];
 
