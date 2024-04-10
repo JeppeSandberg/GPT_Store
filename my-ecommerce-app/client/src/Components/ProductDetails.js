@@ -18,7 +18,6 @@ function ProductDetails() {
       setProduct(response.data);
     });
     getRatings(productId).then(response => {
-      console.log('getRatings response in ProductDetails:', response);
       setRatings(response);
     });
   }, [productId]);

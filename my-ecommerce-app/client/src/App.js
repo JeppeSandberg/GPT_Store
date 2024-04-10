@@ -11,35 +11,37 @@ import Categories from './Components/Categories';
 import AdminPage from './Components/AdminPage';
 import PrivateRoute from './Components/PrivateRoute';
 import { CartProvider } from './CartContext';
-import { UserContext } from './UserContext';
+import { UserContext, UserProvider } from './UserContext';
 
 function App() {
   const { username } = useContext(UserContext);
 
   return (
-    <CartProvider>
-      <Router>
-        <div className="App">
-          <header className="App-header">
-            <h1>My Ecommerce App</h1>
-            <Link to="/">Home</Link>
-            <Link to="/login">Login</Link>
-            <Link to="/register">Register</Link>
-            {username && <p>Welcome, {username}!</p>}
-          </header>
-          <Categories />
-          <Routes>
-            <Route path="/register" element={<Register />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/" element={<Products />} />
-            <Route path="/cart" element={<Cart />} />
-            <Route path="/products/:productId" element={<ProductDetails />} />
-            <Route path="/categories/:categoryId" element={<Products />} />
-            <Route path="/admin" element={<AdminPage />} />
-          </Routes>
-        </div>
-      </Router>
-    </CartProvider>
+    <UserProvider>
+      <CartProvider>
+        <Router>
+          <div className="App">
+            <header className="App-header">
+              <h1>GPT Ecommerce App</h1>
+              <Link to="/">Home</Link>
+              <Link to="/login">Login</Link>
+              <Link to="/register">Register</Link>
+              {username && <p>Welcome, {username}!</p>}
+            </header>
+            <Categories />
+            <Routes>
+              <Route path="/register" element={<Register />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/" element={<Products />} />
+              <Route path="/cart" element={<Cart />} />
+              <Route path="/products/:productId" element={<ProductDetails />} />
+              <Route path="/categories/:categoryId" element={<Products />} />
+              <Route path="/admin" element={<AdminPage />} />
+            </Routes>
+          </div>
+        </Router>
+      </CartProvider>
+    </UserProvider>
   );
 }
 

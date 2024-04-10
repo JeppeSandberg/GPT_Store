@@ -87,7 +87,16 @@ app.post("/login", (req, res) => {
 
 // Products routes
 app.get("/products", (req, res) => {
-  db.all("SELECT * FROM products", [], (err, rows) => {
+  const { categoryId } = req.query;
+  let sql = "SELECT * FROM products";
+  let params = [];
+
+  if (categoryId) {
+    sql += " WHERE categoryId = ?";
+    params.push(categoryId);
+  }
+
+  db.all(sql, params, (err, rows) => {
     if (err) {
       res.status(500).send(err);
     } else {

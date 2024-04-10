@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { getProducts, getOrders, addProduct, getCategories, updateProduct, removeProduct } from '../Services/api';
 import '../App.css';
+import withAuthentication from '../withAuthentication';
 
 function AdminPage() {
   const [products, setProducts] = useState([]);
@@ -11,7 +12,7 @@ function AdminPage() {
   const [editingProduct, setEditingProduct] = useState({ name: '', description: '', price: 0, stock: 0, categoryId: '' });
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
+   useEffect(() => {
     getProducts().then(setProducts);
     getOrders().then(setOrders);
     getCategories().then(categories => {
@@ -19,8 +20,6 @@ function AdminPage() {
       setLoading(false);
     });
   }, []);
-
-  console.log(categories);
 
   const handleAddProduct = product => {
     addProduct(product).then(newProduct => {
@@ -129,4 +128,4 @@ function AdminPage() {
   );
 }
 
-export default AdminPage;
+export default withAuthentication(AdminPage);

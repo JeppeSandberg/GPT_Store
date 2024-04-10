@@ -74,7 +74,6 @@ export function updateProduct(id, data) {
 export function getRatings(productId) {
   return axios.get(`${BASE_URL}/ratings/${productId}`)
     .then(response => {
-      console.log('getRatings response:', response);
       return response.data;
     })
     .catch(error => console.error('Error:', error));

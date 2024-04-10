@@ -11,15 +11,11 @@ function Products() {
   const { categoryId } = useParams();
 
   useEffect(() => {
-    if (categoryId) {
-      getProducts(categoryId).then(products => {
-        setProducts(products);
-      });
-    } else {
-      getProducts().then(products => {
-        setProducts(products);
-      });
-    }
+    console.log(categoryId); // Add this line
+    getProducts(categoryId).then(products => {
+      console.log(products); // Add this line
+      setProducts(products);
+    });
   }, [categoryId]);
 
   useEffect(() => {
