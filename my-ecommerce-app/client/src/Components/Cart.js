@@ -18,30 +18,15 @@ function Cart() {
   const placeOrder = () => {
     const total = state.reduce((sum, item) => sum + item.price * item.quantity, 0);
     const items = state.map(item => ({ id: item.id, quantity: item.quantity }));
-
+  
     if (!userId || !username || items.length === 0 || total <= 0) {
       console.error('Error: Invalid order data');
       return;
     }
-
+  
     createOrder(userId, username, items, total)
       .then(response => {
         dispatch({ type: 'CLEAR_CART' });
-
-        // Update the stock of each product in the order
-        items.forEach(item => {
-          getProduct(item.id)
-          .then(product => {
-            const updatedProduct = { 
-              ...product, 
-              stock: product.stock - item.quantity 
-            };
-            return updateProduct(item.id, updatedProduct)
-              .then(() => updatedProduct); // <-- return updatedProduct here
-          })
-          .then(updatedProduct => console.log(updatedProduct)) // <-- receive updatedProduct here
-          .catch(error => console.error('Error updating product:', error));
-        });
       })
       .catch(error => {
         console.error('Error creating order:', error);

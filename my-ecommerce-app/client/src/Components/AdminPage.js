@@ -20,6 +20,8 @@ function AdminPage() {
       setLoading(false);
     });
   }, []);
+  
+  console.log(orders)
 
   const handleAddProduct = product => {
     addProduct(product).then(newProduct => {
@@ -121,7 +123,8 @@ function AdminPage() {
       {orders.map(order => (
         <div key={order.id}>
           <h3>Order {order.id}</h3>
-          <p>Status: {order.status}</p>
+          <p>User: {order.userId}</p>
+          <p>Total: {order.total}</p>
         </div>
       ))}
     </div>

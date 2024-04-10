@@ -4,17 +4,16 @@ import { UserContext } from './UserContext';
 
 function withAuthentication(WrappedComponent) {
   return function ProtectedRoute(props) {
-    const { username } = useContext(UserContext);
+    const { username, isAdmin } = useContext(UserContext);
     const navigate = useNavigate();
 
     useEffect(() => {
-    console.log(username)
-      if (!username) {
+      if (!username || !isAdmin) {
         navigate('/login');
       }
-    }, [username, navigate]);
+    }, [username, isAdmin, navigate]);
 
-    return username ? <WrappedComponent {...props} /> : null;
+    return username && isAdmin ? <WrappedComponent {...props} /> : null;
   };
 }
 
